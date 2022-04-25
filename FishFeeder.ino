@@ -1,20 +1,6 @@
-#include <Dusk2Dawn.h>
 #include <RTClib.h>
 
 RTC_DS1307 rtc;
-
-// Multiple instances can be created. Arguments are longitude, latitude, and
-// time zone offset in hours from UTC.
-// The first two must be in decimal degrees (DD), e.g. 10.001, versus the more
-// common degrees, minutes, and seconds format (DMS), e.g. 10° 00′ 3.6″. The
-// time zone offset can be expressed in decimal fractions, e.g. "5.75" for
-// Nepal Standard Time, in the few cases where the zones are offset by 30 or
-// 45 minutes.
-// HINT: An easy way to find the longitude and latitude for any arbitrary
-// location is to find the spot in Google Maps, right click the place on the
-// map, and select "What's here?". At the bottom, you’ll see a card with the
-// coordinates.
-Dusk2Dawn chickenCoop(38.515710, -90.318972, -6);
 
 void setup() 
 {
@@ -37,6 +23,7 @@ void setup()
   pinMode(B,OUTPUT);
   pinMode(C,OUTPUT);
   pinMode(D,OUTPUT);
+  pinMode(8, OUTPUT);
 
   // Arduino is dumb and cant detect usb connection. Uncomment to set time after changing rtc battery.
   // set time to current system time.
@@ -64,9 +51,9 @@ void loop()
       min = (currTime.minute()),
       sec = (currTime.second()),
       feedMon = 4,
-      feedDay = 19,
-      feedHr = 22,
-      feedMin = 21;
+      feedDay = 25,
+      feedHr = 8,
+      feedMin = 3;
   String
     feedMonStr = String(feedMon),
     feedDayStr = String(feedDay),
@@ -124,7 +111,9 @@ void feedFish(const int mon, const int day, const int hr, const int min, const i
 {
   if(mon == feedMon && day == feedDay && hr == feedHr && min == feedMin)
   {
-    Serial.println("feeding fish!");
+    digitalWrite(8, HIGH);
+    delay(1000);
+    Serial.println("Feeding fish!");
     int i;
     i=0;
     while(i<NUMBER_OF_STEPS_PER_REV)
@@ -132,5 +121,6 @@ void feedFish(const int mon, const int day, const int hr, const int min, const i
       onestep();
       i++;
       }
+     digitalWrite(13, LOW);
   }
 }
